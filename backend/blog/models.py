@@ -3,46 +3,9 @@ from django.utils import timezone
 
 # Create your models here.
 
-class Tarent(models.Model):
-
-    stage_name = models.CharField(
-        verbose_name = "芸名。無いなら、芸能ニュースなどでの呼称",
-        max_length = 40,
-    )
-    family_name = models.CharField(
-        verbose_name = "性(漢字)漢字が無い外国人ならカタカナ",
-        max_length = 40,
-    )
-    first_rome_name = models.CharField(
-        verbose_name = "名(漢字)漢字が無い外国人ならカタカナ",
-        max_length = 40,
-    )
-    family_rome_name = models.CharField(
-        verbose_name = "性(ローマ字)",
-        max_length = 40,
-    )
-    first_rome_name = models.CharField(
-        verbose_name = "名(ローマ字)",
-        max_length = 40,
-    )
-    birth_date = models.DateField(
-        verbose_name = "誕生日(分からなければ空欄)",
-        blank=True,
-        null=True,
-    )
-    charm_point = models.CharField(
-        verbose_name = "良い点👍",
-        max_length = 40,
-        blank=True,
-        null=True,
-    )
-
-    def __str__(self):
-        return f'{self.stage_name}'
-
 class TarentPersonality(models.Model):
     name = models.CharField(
-        verbose_name = "性格(こっちから見えるでよい。)",
+        verbose_name = "性格",
         max_length = 40,
     )
     def __str__(self):
@@ -88,6 +51,108 @@ class TarentBraSize(models.Model):
     def __str__(self):
         return f'{self.name}'
 
+class Tarent(models.Model):
+
+    stage_name = models.CharField(
+        verbose_name = "芸名。無いなら、芸能ニュースなどでの呼称",
+        max_length = 40,
+    )
+    family_name = models.CharField(
+        verbose_name = "性(漢字)漢字が無い外国人ならカタカナ",
+        max_length = 40,
+    )
+    first_name = models.CharField(
+        verbose_name = "名(漢字)漢字が無い外国人ならカタカナ",
+        max_length = 40,
+        blank=True,
+        null=True,
+    )
+    family_katakana_name = models.CharField(
+        verbose_name = "セイ(カナ)",
+        max_length = 40,
+        blank=True,
+        null=True,
+    )
+    first_katakana_name = models.CharField(
+        verbose_name = "メイ(カナ)",
+        max_length = 40,
+        blank=True,
+        null=True,
+    )
+    family_rome_name = models.CharField(
+        verbose_name = "性(ローマ字)",
+        max_length = 40,
+    )
+    first_rome_name = models.CharField(
+        verbose_name = "名(ローマ字)",
+        max_length = 40,
+    )
+    birth_date = models.DateField(
+        verbose_name = "誕生日(分からなければ空欄)",
+        blank=True,
+        null=True,
+    )
+    charm_point = models.CharField(
+        verbose_name = "良い点👍",
+        max_length = 40,
+        blank=True,
+        null=True,
+    )
+    tarent_personality = models.ManyToManyField(
+        TarentPersonality,
+        verbose_name = "性格(こっちから見えるでよい。)",
+    )
+    tarent_face = models.ManyToManyField(
+        TarentFace,
+        verbose_name = "顔の傾向",
+    )
+    tarent_body = models.ManyToManyField(
+        TarentBody,
+        verbose_name = "ボディ",
+    )
+    tarent_upper_body = models.ManyToManyField(
+        TarentUpperBody,
+        verbose_name = "上半身",
+    )
+    tarent_lower_body = models.ManyToManyField(
+        TarentLowerBody,
+        verbose_name = "下半身",
+    )
+    tarent_bra_size = models.ForeignKey(
+        TarentBraSize,
+        verbose_name = "ブラのサイズ",
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+    )
+    def __str__(self):
+        return f'{self.stage_name}'
+
+class TarentArtFetishism(models.Model):
+    name = models.CharField(
+        verbose_name = "フェチ名",
+        max_length = 40,
+    )
+    def __str__(self):
+        return f'{self.name}'
+
+class InfoSite(models.Model):
+    name = models.CharField(
+        verbose_name = "名前",
+        max_length = 40,
+    )
+    url = models.URLField(
+        verbose_name = "url",
+        max_length = 40,
+    )
+    individual = models.BooleanField(
+        verbose_name = "個人サイト",
+        max_length = 40,
+        default=True,
+    )
+    def __str__(self):
+        return f'{self.name}'
+
 class TarentArt(models.Model):
     name = models.CharField(
         verbose_name = "作品名",
@@ -98,27 +163,85 @@ class TarentArt(models.Model):
         verbose_name='タレント',
         on_delete=models.PROTECT
     )
+    title_img = models.CharField(
+        verbose_name = "タイトル画像",
+        max_length = 40,
+        blank=True,
+        null=True,
+    )
+    good_point = models.CharField(
+        verbose_name = "良い点👍",
+        max_length = 40,
+        blank=True,
+        null=True,
+    )
+    bad_point = models.CharField(
+        verbose_name = "悪い点👎",
+        max_length = 40,
+        blank=True,
+        null=True,
+    )
+    tarent_art_fetishism = models.ManyToManyField(
+        TarentArtFetishism,
+        verbose_name = "フェチ名",
+    )
     published_date = models.DateField(
         verbose_name = "出版日",
     )
-    
     def __str__(self):
         return f'{self.name}'
 
-class TarentArtFetishism(models.Model):
-    name = models.CharField(
-        verbose_name = "作品名",
+class TarentArtInfoSiteArticle(models.Model):
+    url = models.URLField(
+        verbose_name = "url",
         max_length = 40,
     )
-    tarent = models.ForeignKey(
-        Tarent,
-        verbose_name='タレント',
-        on_delete=models.PROTECT
+    info_site = models.ForeignKey(
+        InfoSite,
+        verbose_name = "情報サイト名",
+        on_delete=models.PROTECT,
     )
-    published_date = models.DateField(
-        verbose_name = "出版日",
+    tarent_art = models.ForeignKey(
+        TarentArt,
+        verbose_name = "紹介作品",
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
     )
-    
+    def __str__(self):
+        return f'{self.info_site}'
+
+class AffiliateProvider(models.Model):
+    name = models.CharField(
+        verbose_name = "名前",
+        max_length = 40,
+    )
+    url = models.URLField(
+        verbose_name = "url",
+        max_length = 40,
+    )
+    def __str__(self):
+        return f'{self.name}'
+
+class TarentArtSampleImage(models.Model):
+    url = models.URLField(
+        verbose_name = "サンプル画像url",
+        max_length = 40,
+    )
+    html = models.CharField(
+        verbose_name = "サンプル画像html",
+        max_length = 40,
+    )
+    tarent_art = models.ForeignKey(
+        TarentArt,
+        verbose_name = "作品名",
+        on_delete=models.PROTECT,
+    )
+    affiliate_provider = models.ForeignKey(
+        AffiliateProvider,
+        verbose_name = "サンプル画像提供元",
+        on_delete=models.PROTECT,
+    )
     def __str__(self):
         return f'{self.name}'
 
@@ -173,7 +296,7 @@ class TarentSite(models.Model):
     )
     site_type = models.ForeignKey(
         SiteType,
-        verbose_name='タレント',
+        verbose_name='サイトのタイプ',
         on_delete=models.PROTECT
     )
     tarent = models.ForeignKey(
@@ -182,6 +305,6 @@ class TarentSite(models.Model):
         on_delete=models.PROTECT
     )
     def __str__(self):
-        return f'{self.tarent}SNS'
+        return f'{self.tarent}のサイト'
 
 

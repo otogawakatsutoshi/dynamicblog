@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Tarent,TarentPersonality,TarentFace,TarentBody,TarentUpperBody,TarentLowerBody,TarentBraSize,TarentArt,TarentArtFetishism,TarentTimeline,TarentSite,SiteType
+from .models import Tarent,TarentPersonality,TarentFace,TarentBody,TarentUpperBody,TarentLowerBody,TarentBraSize,AffiliateProvider,TarentArtInfoSiteArticle,TarentArtSampleImage,TarentArt,TarentArtFetishism,TarentTimeline,TarentSite,SiteType,InfoSite
 
 @admin.register(Tarent)
 class Tarent(admin.ModelAdmin):
@@ -28,9 +28,18 @@ class TarentLowerBody(admin.ModelAdmin):
 @admin.register(TarentBraSize)
 class TarentBraSize(admin.ModelAdmin):
    pass
-
+@admin.register(TarentArtInfoSiteArticle)
+class TarentArtInfoSiteArticle(admin.ModelAdmin):
+   pass
 @admin.register(TarentArt)
 class TarentArt(admin.ModelAdmin):
+   pass
+
+@admin.register(AffiliateProvider)
+class AffiliateProvider(admin.ModelAdmin):
+   pass
+@admin.register(TarentArtSampleImage)
+class TarentArtSampleImage(admin.ModelAdmin):
    pass
 
 @admin.register(TarentArtFetishism)
@@ -47,4 +56,8 @@ class TarentSite(admin.ModelAdmin):
 
 @admin.register(SiteType)
 class SiteType(admin.ModelAdmin):
+   pass
+
+@admin.register(InfoSite)
+class InfoSite(admin.ModelAdmin):
    pass
