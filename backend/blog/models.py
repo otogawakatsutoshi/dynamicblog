@@ -242,6 +242,11 @@ class TarentArtSampleImage(models.Model):
         verbose_name = "サンプル画像提供元",
         on_delete=models.PROTECT,
     )
+    sort = models.IntegerField(
+        verbose_name = '表示順',
+        default = 0
+    )
+
     def __str__(self):
         return f'{self.name}'
 

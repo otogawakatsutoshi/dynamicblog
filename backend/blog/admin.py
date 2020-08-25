@@ -3,61 +3,66 @@ from .models import Tarent,TarentPersonality,TarentFace,TarentBody,TarentUpperBo
 
 @admin.register(Tarent)
 class Tarent(admin.ModelAdmin):
-   pass
-
+    search_fields = ['stage_name']
+   
 @admin.register(TarentPersonality)
 class TarentPersonality(admin.ModelAdmin):
-   pass
+    pass
 
 @admin.register(TarentFace)
 class TarentFace(admin.ModelAdmin):
-   pass
+    pass
 
 @admin.register(TarentBody)
 class TarentBody(admin.ModelAdmin):
-   pass
+    pass
 
 @admin.register(TarentUpperBody)
 class TarentUpperBody(admin.ModelAdmin):
-   pass
+    pass
 
 @admin.register(TarentLowerBody)
 class TarentLowerBody(admin.ModelAdmin):
-   pass
+    pass
 
 @admin.register(TarentBraSize)
 class TarentBraSize(admin.ModelAdmin):
-   pass
+    pass
+
 @admin.register(TarentArtInfoSiteArticle)
 class TarentArtInfoSiteArticle(admin.ModelAdmin):
-   pass
+    autocomplete_fields = ['tarent_art']
+
 @admin.register(TarentArt)
 class TarentArt(admin.ModelAdmin):
-   pass
+    search_fields = ['name']
+    autocomplete_fields = ['tarent']
 
 @admin.register(AffiliateProvider)
 class AffiliateProvider(admin.ModelAdmin):
-   pass
+    pass
+
 @admin.register(TarentArtSampleImage)
 class TarentArtSampleImage(admin.ModelAdmin):
-   pass
+    search_fields = ['tarent_art']
+    autocomplete_fields = ['tarent_art']
 
 @admin.register(TarentArtFetishism)
 class TarentArtFetishism(admin.ModelAdmin):
-   pass
+    pass
 
 @admin.register(TarentTimeline)
 class TarentTimeline(admin.ModelAdmin):
-   pass
+    autocomplete_fields = ['tarent']
 
 @admin.register(TarentSite)
 class TarentSite(admin.ModelAdmin):
-   pass
+    autocomplete_fields = ['tarent']
 
 @admin.register(SiteType)
 class SiteType(admin.ModelAdmin):
-   pass
+    pass
 
 @admin.register(InfoSite)
 class InfoSite(admin.ModelAdmin):
-   pass
+    pass
