@@ -1,84 +1,89 @@
 from rest_framework import filters, generics, viewsets
-from .models import Tarent,TarentPersonality,TarentFace,TarentBody,TarentUpperBody,TarentLowerBody,TarentBraSize,AffiliateProvider,TarentArtInfoSiteArticle,TarentArtSampleImage,TarentArt,TarentArtFetishism,TarentTimeline,TarentSite,SiteType,InfoSite
-from .serializer import TarentSerializer,TarentPersonalitySerializer,TarentFaceSerializer,TarentBodySerializer,TarentUpperBodySerializer,TarentLowerBodySerializer,TarentBraSizeSerializer,AffiliateProviderSerializer,TarentArtInfoSiteArticleSerializer,TarentArtSampleImageSerializer,InfoSiteSerializer,TarentArtSerializer,TarentArtFetishismSerializer,TarentTimelineSerializer,TarentSiteSerializer,SiteTypeSerializer
+from . import models,serializer
 
 class TarentViewSet(viewsets.ModelViewSet):
-    queryset = Tarent.objects.all()
-    serializer_class = TarentSerializer
+    queryset = models.Tarent.objects.all()
+    serializer_class = serializer.TarentSerializer
     filter_fields = ('name',)
+    def get(self, request):
+        if "id" in request.GET:
+            # query_paramが指定されている場合の処理
+            id = request.GET.get("id")
+            TarentViewSet.queryset = models.Tarent.objects.filter(id=id)
+        else:
+            pass
 
 class TarentPersonalityViewSet(viewsets.ModelViewSet):
-    queryset = TarentPersonality.objects.all()
-    serializer_class = TarentPersonalitySerializer
+    queryset = models.TarentPersonality.objects.all()
+    serializer_class = serializer.TarentPersonalitySerializer
     filter_fields = ('name',)
 
 class TarentFaceViewSet(viewsets.ModelViewSet):
-    queryset = TarentFace.objects.all()
-    serializer_class = TarentFaceSerializer
+    queryset = models.TarentFace.objects.all()
+    serializer_class = serializer.TarentFaceSerializer
     filter_fields = ('name',)
 
 class TarentBodyViewSet(viewsets.ModelViewSet):
-    queryset = TarentBody.objects.all()
-    serializer_class = TarentBodySerializer
+    queryset = models.TarentBody.objects.all()
+    serializer_class = serializer.TarentBodySerializer
     filter_fields = ('name',)
 
 class TarentUpperBodyViewSet(viewsets.ModelViewSet):
-    queryset = TarentUpperBody.objects.all()
-    serializer_class = TarentUpperBodySerializer
+    queryset = models.TarentUpperBody.objects.all()
+    serializer_class = serializer.TarentUpperBodySerializer
     filter_fields = ('name',)
 
 class TarentLowerBodyViewSet(viewsets.ModelViewSet):
-    queryset = TarentLowerBody.objects.all()
-    serializer_class = TarentLowerBodySerializer
+    queryset = models.TarentLowerBody.objects.all()
+    serializer_class = serializer.TarentLowerBodySerializer
     filter_fields = ('name',)
 
 class TarentBraSizeViewSet(viewsets.ModelViewSet):
-    queryset = TarentBraSize.objects.all()
-    serializer_class = TarentBraSizeSerializer
+    queryset = models.TarentBraSize.objects.all()
+    serializer_class = serializer.TarentBraSizeSerializer
     filter_fields = ('name',)
 
 class AffiliateProviderViewSet(viewsets.ModelViewSet):
-    queryset = AffiliateProvider.objects.all()
-    serializer_class = AffiliateProviderSerializer
+    queryset = models.AffiliateProvider.objects.all()
+    serializer_class = serializer.AffiliateProviderSerializer
     filter_fields = ('name',)
 
 class TarentArtInfoSiteArticleViewSet(viewsets.ModelViewSet):
-    queryset = TarentArtInfoSiteArticle.objects.all()
-    serializer_class = TarentArtInfoSiteArticleSerializer
+    queryset = models.TarentArtInfoSiteArticle.objects.all()
+    serializer_class = serializer.TarentArtInfoSiteArticleSerializer
     filter_fields = ('name',)
 
 class TarentArtSampleImageViewSet(viewsets.ModelViewSet):
-    queryset = TarentArtSampleImage.objects.all()
-    serializer_class = TarentArtSampleImageSerializer
+    queryset = models.TarentArtSampleImage.objects.all()
+    serializer_class = serializer.TarentArtSampleImageSerializer
     filter_fields = ('name',)
 
 class InfoSiteViewSet(viewsets.ModelViewSet):
-    queryset = InfoSite.objects.all()
-    serializer_class = InfoSiteSerializer
+    queryset = models.InfoSite.objects.all()
+    serializer_class = serializer.InfoSiteSerializer
     filter_fields = ('name',)
 
 class TarentArtViewSet(viewsets.ModelViewSet):
-    queryset = TarentArt.objects.all()
-    serializer_class = TarentArtSerializer
+    queryset = models.TarentArt.objects.all()
+    serializer_class = serializer.TarentArtSerializer
     filter_fields = ('name',)
 
 class TarentArtFetishismViewSet(viewsets.ModelViewSet):
-    queryset = TarentArtFetishism.objects.all()
-    serializer_class = TarentArtFetishismSerializer
+    queryset = models.TarentArtFetishism.objects.all()
+    serializer_class = serializer.TarentArtFetishismSerializer
     filter_fields = ('name',)
 
 class TarentTimelineViewSet(viewsets.ModelViewSet):
-    queryset = TarentTimeline.objects.all()
-    serializer_class = TarentTimelineSerializer
+    queryset = models.TarentTimeline.objects.all()
+    serializer_class = serializer.TarentTimelineSerializer
     filter_fields = ('draft',)
 
 class TarentSiteViewSet(viewsets.ModelViewSet):
-    queryset = TarentSite.objects.all()
-    serializer_class = TarentSiteSerializer
+    queryset = models.TarentSite.objects.all()
+    serializer_class = serializer.TarentSiteSerializer
     filter_fields = ('name',)
 
 class SiteTypeViewSet(viewsets.ModelViewSet):
-    queryset = SiteType.objects.all()
-    serializer_class = SiteTypeSerializer
+    queryset = models.SiteType.objects.all()
+    serializer_class = serializer.SiteTypeSerializer
     filter_fields = ('name',)
-

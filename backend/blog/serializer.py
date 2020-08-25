@@ -1,82 +1,85 @@
 from rest_framework import serializers
-from .models import Tarent,TarentPersonality,TarentFace,TarentBody,TarentUpperBody,TarentLowerBody,TarentBraSize,AffiliateProvider,TarentArtInfoSiteArticle,TarentArtSampleImage,TarentArt,TarentArtFetishism,TarentTimeline,TarentSite,SiteType,InfoSite
+from . import models
 
 class TarentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Tarent
-        fields = ('id', 'draft', 'published_at')
+        model = models.Tarent
+        fields = (
+            'id',
+            'charm_point',
+        )
 
 class TarentPersonalitySerializer(serializers.ModelSerializer):
     class Meta:
-        model = TarentPersonality
+        model = models.TarentPersonality
         fields = ('id', 'draft', 'published_at')
 
 class TarentFaceSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TarentFace
+        model = models.TarentFace
         fields = ('id', 'draft', 'published_at')
 
 class TarentBodySerializer(serializers.ModelSerializer):
     class Meta:
-        model = TarentBody
+        model = models.TarentBody
         fields = ('id', 'draft', 'published_at')
 
 class TarentUpperBodySerializer(serializers.ModelSerializer):
     class Meta:
-        model = TarentUpperBody
+        model = models.TarentUpperBody
         fields = ('id', 'draft', 'published_at')
 
 class TarentLowerBodySerializer(serializers.ModelSerializer):
     class Meta:
-        model = TarentLowerBody
+        model = models.TarentLowerBody
         fields = ('id', 'draft', 'published_at')
 
 class TarentBraSizeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TarentBraSize
+        model = models.TarentBraSize
         fields = ('id', 'draft', 'published_at')
 
 class AffiliateProviderSerializer(serializers.ModelSerializer):
     class Meta:
-        model = AffiliateProvider
+        model = models.AffiliateProvider
         fields = ('id', 'draft', 'published_at')
 
 class TarentArtInfoSiteArticleSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TarentArtInfoSiteArticle
+        model = models.TarentArtInfoSiteArticle
         fields = ('id', 'draft', 'published_at')
 
 class TarentArtSampleImageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TarentArtSampleImage
+        model = models.TarentArtSampleImage
         fields = ('id', 'draft', 'published_at')
 
 class InfoSiteSerializer(serializers.ModelSerializer):
     class Meta:
-        model = InfoSite
+        model = models.InfoSite
         fields = ('id', 'draft', 'published_at')
 
 class TarentArtSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TarentArt
+        model = models.TarentArt
         fields = ('id', 'name')
 
 class TarentArtFetishismSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TarentArtFetishism
+        model = models.TarentArtFetishism
         fields = ('id', 'draft', 'published_at')
 
 class TarentTimelineSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TarentTimeline
+        model = models.TarentTimeline
         fields = ('id', 'draft', 'published_at')
 
 class TarentSiteSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TarentSite
+        model = models.TarentSite
         fields = ('id', 'draft', 'published_at')
 
 class SiteTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = SiteType
+        model = models.SiteType
         fields = ('id', 'draft', 'published_at')

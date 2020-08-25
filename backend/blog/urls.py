@@ -1,24 +1,24 @@
 from rest_framework import routers
-from .views import TarentViewSet,TarentPersonalityViewSet,TarentFaceViewSet,TarentBodyViewSet,TarentUpperBodyViewSet,TarentLowerBodyViewSet,TarentBraSizeViewSet,AffiliateProviderViewSet,TarentArtInfoSiteArticleViewSet,TarentArtSampleImageViewSet,InfoSiteViewSet,TarentArtViewSet,TarentArtFetishismViewSet,TarentTimelineViewSet,TarentSiteViewSet,SiteTypeViewSet
+from . import views
 from django.urls import path, include
 
 router = routers.DefaultRouter()
-router.register(r'tarent',TarentViewSet)
-router.register(r'tarent_personality',TarentPersonalityViewSet)
-router.register(r'tarent_face',TarentFaceViewSet)
-router.register(r'tarent_body',TarentBodyViewSet)
-router.register(r'tarent_upper_body',TarentUpperBodyViewSet)
-router.register(r'tarent_lower_body',TarentLowerBodyViewSet)
-router.register(r'tarent_bra_size',TarentBraSizeViewSet)
-router.register(r'affiliate_provider',AffiliateProviderViewSet)
-router.register(r'tarent_art_infoSite_article',TarentArtInfoSiteArticleViewSet)
-router.register(r'tarent_art_sample_image',TarentArtSampleImageViewSet)
-router.register(r'info_site',InfoSiteViewSet)
-router.register(r'tarent_art',TarentArtViewSet)
-router.register(r'tarent_art_fetishism',TarentArtFetishismViewSet)
-router.register(r'tarent_timeline',TarentTimelineViewSet)
-router.register(r'tarent_site',TarentSiteViewSet)
-router.register(r'site_type',SiteTypeViewSet)
+router.register(r'tarent',views.TarentViewSet)
+router.register(r'tarent_personality',views.TarentPersonalityViewSet)
+router.register(r'tarent_face',views.TarentFaceViewSet)
+router.register(r'tarent_body',views.TarentBodyViewSet)
+router.register(r'tarent_upper_body',views.TarentUpperBodyViewSet)
+router.register(r'tarent_lower_body',views.TarentLowerBodyViewSet)
+router.register(r'tarent_bra_size',views.TarentBraSizeViewSet)
+router.register(r'affiliate_provider',views.AffiliateProviderViewSet)
+router.register(r'tarent_art_infoSite_article',views.TarentArtInfoSiteArticleViewSet)
+router.register(r'tarent_art_sample_image',views.TarentArtSampleImageViewSet)
+router.register(r'info_site',views.InfoSiteViewSet)
+router.register(r'tarent_art',views.TarentArtViewSet)
+router.register(r'tarent_art_fetishism',views.TarentArtFetishismViewSet)
+router.register(r'tarent_timeline',views.TarentTimelineViewSet)
+router.register(r'tarent_site',views.TarentSiteViewSet)
+router.register(r'site_type',views.SiteTypeViewSet)
 
 urlpatterns = [
    path('', include(router.urls)),
