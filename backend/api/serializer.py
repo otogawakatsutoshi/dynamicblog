@@ -6,7 +6,21 @@ class TarentSerializer(serializers.ModelSerializer):
         model = models.Tarent
         fields = (
             'id',
+            'stage_name',
+            'family_name',
+            'first_name',
+            'family_katakana_name',
+            'first_katakana_name',
+            'family_rome_name',
+            'first_rome_name',
             'charm_point',
+            'birth_date',
+            'tarent_personality',
+            'tarent_face',
+            'tarent_body',
+            'tarent_upper_body',
+            'tarent_lower_body',
+            'tarent_bra_size',
         )
 
 class TarentPersonalitySerializer(serializers.ModelSerializer):

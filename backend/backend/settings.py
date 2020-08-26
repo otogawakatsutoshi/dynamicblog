@@ -37,9 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'guardian',
     'rest_framework',
     'corsheaders',
-    'blog',
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -123,15 +124,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# Django REST framework
-REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
-}
-
 # you write frontend origine you authorized
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:8080",
@@ -144,7 +136,7 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 # allowed cors is only api/ url
-CORS_URLS_REGEX = r'^/blog/api/.*$'
+CORS_URLS_REGEX = r'^/api/.*$'
 
 # allowed cors method. you never uncomment, if you dont need to use http method.
 CORS_ALLOW_METHODS = [
@@ -153,3 +145,8 @@ CORS_ALLOW_METHODS = [
 #    'POST',
 #    'PATCH',
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend', # this is default
+    'guardian.backends.ObjectPermissionBackend',
+)

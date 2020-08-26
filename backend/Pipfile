@@ -11,6 +11,7 @@ djangorestframework = "*"
 markdown = "*"
 django-filter = "*"
 django-cors-headers = "*"
+django-guardian = "*"
 
 [requires]
 python_version = "3.8"
