@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django import forms
 from . import models
 from guardian.admin import GuardedModelAdmin
 
@@ -67,3 +68,17 @@ class SiteType(GuardedModelAdmin):
 @admin.register(models.InfoSite)
 class InfoSite(GuardedModelAdmin):
     pass
+
+@admin.register(models.TarentInfoSiteEmbed)
+class TarentInfoSiteEmbed(GuardedModelAdmin):
+    search_fields = ['tarent__stage_name']
+    list_display = ('stage_name','site_type','sort')
+    def stage_name(self, obj):
+        return obj.tarent.stage_name
+    stage_name.short_description = 'stage_name'
+    stage_name.admin_order_field = 'tarent__stage_name'
+
+    def site_type(self, obj):
+        return obj.site_type.name
+    site_type.short_description = 'site_type'
+    site_type.admin_order_field = 'site_type__name'

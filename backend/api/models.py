@@ -294,6 +294,31 @@ class SiteType(models.Model):
     def __str__(self):
         return f'{self.name}'
 
+class TarentInfoSiteEmbed(models.Model):
+    tarent = models.ForeignKey(
+        Tarent,
+        verbose_name='タレント',
+        on_delete=models.PROTECT,
+    )
+
+    html = models.TextField(
+        verbose_name = "embed_html",
+        max_length = 8000,
+    )
+    
+    site_type = models.ForeignKey(
+        SiteType,
+        verbose_name='サイトのタイプ',
+        on_delete=models.PROTECT
+    )
+    sort = models.IntegerField(
+        verbose_name = '表示順',
+        default = 0
+    )
+    def __str__(self):
+        return f'{self.site_type}'
+
+
 class TarentSite(models.Model):
 
     url = models.URLField(

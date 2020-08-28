@@ -49,7 +49,9 @@ SELECT api_tarent.id,
     group_concat(DISTINCT api_tarentart.id) AS tarent_art_id,
 	group_concat(DISTINCT api_tarentart.name) AS tarent_art_name,
 	group_concat(DISTINCT api_tarentsite.url) AS tarent_site_url,
-	group_concat(DISTINCT api_sitetype.name) AS site_type_name
+	group_concat(DISTINCT api_sitetype.name) AS site_type_name,
+    group_concat(DISTINCT api_tarentinfositeembed.html) AS tarent_info_site_embed_html,
+	group_concat(DISTINCT api_sitetype2.name) AS tarent_info_site_type_name
 
     FROM api_Tarent
     INNER JOIN api_tarent_tarent_personality
@@ -85,6 +87,12 @@ SELECT api_tarent.id,
 	INNER JOIN api_sitetype
 		ON api_tarentsite.site_type_id = api_sitetype.id
 
+    INNER JOIN api_tarentinfositeembed
+		ON api_tarent.id = api_tarentinfositeembed.tarent_id
+	INNER JOIN api_sitetype AS api_sitetype2
+		ON api_tarentinfositeembed.site_type_id = api_sitetype2.id
+		AND api_sitetype2.name IN ('instagram','youtube','twitter')
+
     WHERE api_Tarent.id = %s
     GROUP BY api_tarent.stage_name,
         api_tarent.family_name,
@@ -101,6 +109,8 @@ SELECT api_tarent.id,
         [id])
         # 一行であることは確定なので[0]でjsonに戻す。
         queryset = dictfetchall(cursor)[0]
+
+
         queryset['tarent_personality_id'] = queryset['tarent_personality_id'].split(",")
         queryset['tarent_personality_name'] = queryset['tarent_personality_name'].split(",")
         queryset['tarent_face_id'] = queryset['tarent_face_id'].split(",")
@@ -115,6 +125,8 @@ SELECT api_tarent.id,
         queryset['tarent_art_name'] = queryset['tarent_art_name'].split(",")
         queryset['tarent_site_url'] = queryset['tarent_site_url'].split(",")
         queryset['site_type_name'] = queryset['site_type_name'].split(",")
+        queryset['tarent_info_site_embed_html'] = queryset['tarent_info_site_embed_html'].split(",")
+        queryset['tarent_info_site_type_name'] = queryset['tarent_info_site_type_name'].split(",")
 
         return Response(queryset)
 
