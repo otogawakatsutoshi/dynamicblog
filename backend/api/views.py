@@ -189,9 +189,35 @@ class TarentLowerBodyViewSet(APIView):
     filter_fields = ('name',)
 
 class TarentBraSizeViewSet(APIView):
-    queryset = models.TarentBraSize.objects.all()
-    serializer_class = serializer.TarentBraSizeSerializer
-    filter_fields = ('name',)
+   def get(self, request, id,format=None):
+       
+        cursor = connection.cursor()
+        cursor.execute(
+"""
+SELECT api_tarentbrasize.id,
+		api_tarentbrasize.name AS tarent_bra_size,
+        api_tarentbrasize.memo AS tarent_bra_size_memo,
+		group_concat(api_tarent.id) AS tarent_id,
+		group_concat(api_tarent.stage_name) AS tarent_stage_name
+FROM api_tarentbrasize
+INNER JOIN api_tarent
+	ON api_tarentbrasize.id = api_tarent.tarent_bra_size_id
+WHERE api_tarentbrasize.id = %s
+GROUP BY api_tarentbrasize.id,
+        api_tarentbrasize.memo,
+		api_tarentbrasize.name
+""",
+        [id])
+        # 一行であることは確定なので[0]でjsonに戻す。もしくはnullのときはエラー
+        queryset = dictfetchall(cursor)[0]
+
+        if queryset['tarent_id'] is not None:
+            queryset['tarent_id'] = queryset['tarent_id'].split(",")
+        if queryset['tarent_stage_name'] is not None:
+            queryset['tarent_stage_name'] = queryset['tarent_stage_name'].split(",")
+        
+        return Response(queryset)
+
 
 class AffiliateProviderViewSet(APIView):
     queryset = models.AffiliateProvider.objects.all()

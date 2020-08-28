@@ -48,6 +48,12 @@ class TarentBraSize(models.Model):
         verbose_name = "ブラのサイズ",
         max_length = 2,
     )
+    memo = models.TextField(
+        verbose_name = "サイズについてメモ",
+        max_length = 200,
+        blank=True,
+        null=True,
+    )
     def __str__(self):
         return f'{self.name}'
 
