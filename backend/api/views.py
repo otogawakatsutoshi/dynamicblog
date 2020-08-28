@@ -50,9 +50,30 @@ SELECT api_tarent.id,
 	group_concat(DISTINCT api_tarentart.name) AS tarent_art_name,
 	group_concat(DISTINCT api_tarentsite.url) AS tarent_site_url,
 	group_concat(DISTINCT api_sitetype.name) AS site_type_name,
-    group_concat(DISTINCT api_tarentinfositeembed.html) AS tarent_info_site_embed_html,
-    group_concat(DISTINCT api_tarentinfositeembed.url) AS tarent_info_site_embed_url,
-	group_concat(DISTINCT api_sitetype2.name) AS tarent_info_site_type_name
+    group_concat(DISTINCT CASE api_sitetype2.name
+		WHEN 'twitter' then api_tarentinfositeembed.html
+		ELSE NULL
+	END) AS  twitter_embed_html,
+	group_concat(DISTINCT CASE api_sitetype2.name
+		WHEN 'twitter' then api_tarentinfositeembed.url
+		ELSE NULL
+	END) AS  twitter_embed_url,
+	group_concat(DISTINCT CASE api_sitetype2.name
+		WHEN 'instagram' then api_tarentinfositeembed.html
+		ELSE NULL
+	END) AS  instagram_embed_html,
+	group_concat(DISTINCT CASE api_sitetype2.name
+		WHEN 'instagram' then api_tarentinfositeembed.url
+		ELSE NULL
+	END) AS  instagram_embed_url,
+	group_concat(DISTINCT CASE api_sitetype2.name
+		WHEN 'youtube' then api_tarentinfositeembed.html
+		ELSE NULL
+	END) AS  youtube_embed_html,
+	group_concat(DISTINCT CASE api_sitetype2.name
+		WHEN 'youtube' then api_tarentinfositeembed.url
+		ELSE NULL
+	END) AS  youtube_embed_url
 
     FROM api_Tarent
     INNER JOIN api_tarent_tarent_personality
@@ -126,9 +147,18 @@ SELECT api_tarent.id,
         queryset['tarent_art_name'] = queryset['tarent_art_name'].split(",")
         queryset['tarent_site_url'] = queryset['tarent_site_url'].split(",")
         queryset['site_type_name'] = queryset['site_type_name'].split(",")
-        queryset['tarent_info_site_embed_html'] = queryset['tarent_info_site_embed_html'].split(",")
-        queryset['tarent_info_site_embed_url'] = queryset['tarent_info_site_embed_url'].split(",")
-        queryset['tarent_info_site_type_name'] = queryset['tarent_info_site_type_name'].split(",")
+        if queryset['twitter_embed_html'] is not None:
+            queryset['twitter_embed_html'] = queryset['twitter_embed_html'].split(",")
+        if queryset['twitter_embed_url'] is not None:
+            queryset['twitter_embed_url'] = queryset['twitter_embed_url'].split(",")
+        if queryset['instagram_embed_html'] is not None:
+            queryset['instagram_embed_html'] = queryset['instagram_embed_html'].split(",")
+        if queryset['instagram_embed_url'] is not None:
+            queryset['instagram_embed_url'] = queryset['instagram_embed_url'].split(",")
+        if queryset['youtube_embed_html'] is not None:
+            queryset['youtube_embed_html'] = queryset['youtube_embed_html'].split(",")
+        if queryset['youtube_embed_url'] is not None:
+            queryset['youtube_embed_url'] = queryset['youtube_embed_url'].split(",")
 
         return Response(queryset)
 
