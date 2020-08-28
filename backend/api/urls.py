@@ -3,7 +3,7 @@ from . import views
 from django.urls import path, include
 
 urlpatterns = [
-    path('tarent/', views.TarentViewSet.as_view()),
+    path('tarent/<int:id>/', views.TarentViewSet.as_view()),
     path('tarent_personality/', views.TarentPersonalityViewSet.as_view()),
     path('tarent_face/', views.TarentFaceViewSet.as_view()),
     path('tarent_body/', views.TarentBodyViewSet.as_view()),

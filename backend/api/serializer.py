@@ -23,6 +23,68 @@ class TarentSerializer(serializers.ModelSerializer):
             'tarent_bra_size',
         )
 
+class TarentDetailSerializer(serializers.Serializer):
+    id = serializers.IntegerField(
+    )
+    stage_name = serializers.CharField(
+        max_length = 40
+    )
+    family_name = serializers.CharField(
+        max_length = 40
+    )
+    first_name = serializers.CharField(
+        max_length = 40,
+    )
+    family_katakana_name = serializers.CharField(
+        max_length = 40,
+
+    )
+    first_katakana_name = serializers.CharField(
+        max_length = 40,
+    )
+    family_rome_name = serializers.CharField(
+        max_length = 40,
+    )
+    first_rome_name = serializers.CharField(
+        max_length = 40,
+    )
+    birth_date = serializers.DateField(
+    )
+    charm_point = serializers.CharField(
+        max_length = 40,
+    )
+    tarent_personality_id = serializers.IntegerField(
+    )
+    tarent_personality_name = serializers.CharField(
+        max_length = 40,
+    )
+    tarent_face_id = serializers.IntegerField(
+    )
+    tarent_face_name = serializers.CharField(
+        max_length = 40,
+    )
+    tarent_body_id = serializers.IntegerField(
+    )
+    tarent_body_name = serializers.CharField(
+        max_length = 40,
+    )
+    tarent_upper_body_id = serializers.IntegerField(
+    )
+    tarent_upper_body_name = serializers.CharField(
+        max_length = 40,
+    )
+    
+    tarent_lower_body_id = serializers.IntegerField(
+    )
+    tarent_lower_body_name = serializers.CharField(
+        max_length = 40,
+    )
+    tarent_bra_size_id = serializers.IntegerField(
+    )
+    tarent_bra_size_name = serializers.CharField(
+        max_length = 40,
+    )
+
 class TarentPersonalitySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.TarentPersonality

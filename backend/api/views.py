@@ -1,17 +1,112 @@
+from django.db import connection
 from rest_framework import filters, generics, viewsets,status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.renderers import JSONRenderer
 from . import models,serializer
 
+def dictfetchall(cursor):
+    "Return all rows from a cursor as a dict"
+    columns = [col[0] for col in cursor.description]
+    return [
+        dict(zip(columns, row))
+        for row in cursor.fetchall()
+    ]
+
 class TarentViewSet(APIView):
-    def get(self, request, format=None):
-        queryset = models.Tarent.objects.all()
-        json = serializer.TarentSerializer(queryset, many=True)
-        return Response(json.data)
+    def get(self, request, id,format=None):
+#        queryset = models.Tarent.objects.get(pk=id)
+#        json = serializer.TarentSerializer(queryset)
+#        return Response(json.data)
+
+#        tarent = models.Tarent.objects.get(pk=id)
+       
+        cursor = connection.cursor()
+        cursor.execute(
+"""
+SELECT api_tarent.id,
+    api_tarent.stage_name,
+    api_tarent.family_name,
+    api_tarent.first_name, 
+    api_tarent.family_katakana_name,
+    api_tarent.first_katakana_name,
+    api_tarent.family_rome_name,
+    api_tarent.first_rome_name,
+    api_tarent.birth_date,     
+    api_tarent.charm_point,
+    group_concat(DISTINCT api_tarentpersonality.id) AS tarent_personality_id,
+    group_concat(DISTINCT api_tarentpersonality.name) AS tarent_personality_name,
+	group_concat(DISTINCT api_tarentface.id) AS tarent_face_id,
+    group_concat(DISTINCT api_tarentface.name) AS tarent_face_name,
+	group_concat(DISTINCT api_tarentbody.id) AS tarent_body_id,
+    group_concat(DISTINCT api_tarentbody.name) AS tarent_body_name,
+	group_concat(DISTINCT api_tarentlowerbody.id) AS tarent_lowerbody_id,
+    group_concat(DISTINCT api_tarentlowerbody.name) AS tarent_lowerbody_name,
+	group_concat(DISTINCT api_tarentupperbody.id) AS tarent_upperbody_id,
+    group_concat(DISTINCT api_tarentupperbody.name) AS tarent_upperbody_name,
+	api_tarentbrasize.id AS tarent_brasize_id,
+    api_tarentbrasize.name AS tarent_brasize_name
+
+    FROM api_Tarent
+    INNER JOIN api_tarent_tarent_personality
+        ON api_Tarent.id = api_tarent_tarent_personality.tarent_id
+    INNER JOIN api_tarentpersonality
+        ON api_tarent_tarent_personality.tarentpersonality_id = api_tarentpersonality.id
+	
+	INNER JOIN api_tarent_tarent_face
+        ON api_Tarent.id = api_tarent_tarent_face.tarent_id
+    INNER JOIN api_tarentface
+        ON api_tarent_tarent_face.tarentface_id = api_tarentface.id
+		
+	INNER JOIN api_tarent_tarent_body
+        ON api_Tarent.id = api_tarent_tarent_body.tarent_id
+    INNER JOIN api_tarentbody
+        ON api_tarent_tarent_body.tarentbody_id = api_tarentbody.id
+    
+    INNER join api_tarent_tarent_lower_body
+        ON api_Tarent.id= api_tarent_tarent_lower_body.tarent_id
+	INNER JOIN api_tarentlowerbody
+        ON api_tarent_tarent_lower_body.tarentlowerbody_id = api_tarentlowerbody.id
+		
+	INNER join api_tarent_tarent_upper_body
+        ON api_Tarent.id= api_tarent_tarent_upper_body.tarent_id
+	INNER JOIN api_tarentupperbody
+        ON api_tarent_tarent_upper_body.tarentupperbody_id = api_tarentupperbody.id
+	INNER JOIN api_tarentbrasize
+		ON api_Tarent.tarent_bra_size_id = api_tarentbrasize.id
+    WHERE api_Tarent.id = %s
+    GROUP BY api_tarent.stage_name,
+        api_tarent.family_name,
+        api_tarent.first_name, 
+        api_tarent.family_katakana_name,
+        api_tarent.first_katakana_name,
+        api_tarent.family_rome_name,
+        api_tarent.first_rome_name,
+        api_tarent.birth_date,     
+        api_tarent.charm_point,
+	    api_tarentbrasize.id,
+	    api_tarentbrasize.name
+""",
+        [id])
+        # 一行であることは確定なので[0]でjsonに戻す。
+        queryset = dictfetchall(cursor)[0]
+        queryset['tarent_personality_id'] = queryset['tarent_personality_id'].split(",")
+        queryset['tarent_personality_name'] = queryset['tarent_personality_name'].split(",")
+        queryset['tarent_face_id'] = queryset['tarent_face_id'].split(",")
+        queryset['tarent_face_name'] = queryset['tarent_face_name'].split(",")
+        queryset['tarent_body_id'] = queryset['tarent_body_id'].split(",")
+        queryset['tarent_body_name'] = queryset['tarent_body_name'].split(",")
+        queryset['tarent_lowerbody_id'] = queryset['tarent_lowerbody_id'].split(",")
+        queryset['tarent_lowerbody_name'] = queryset['tarent_lowerbody_name'].split(",")
+        queryset['tarent_upperbody_id'] = queryset['tarent_upperbody_id'].split(",")
+        queryset['tarent_upperbody_name'] = queryset['tarent_upperbody_name'].split(",")
+
+        return Response(queryset)
 
 class TarentPersonalityViewSet(APIView):
     queryset = models.TarentPersonality.objects.all()
     serializer_class = serializer.TarentPersonalitySerializer
+    #json = serializer.TarentSerializer(queryset, many=True)
     filter_fields = ('name',)
 
 class TarentFaceViewSet(APIView):
