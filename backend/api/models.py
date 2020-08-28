@@ -300,6 +300,12 @@ class TarentInfoSiteEmbed(models.Model):
         verbose_name='タレント',
         on_delete=models.PROTECT,
     )
+    url = models.URLField(
+        verbose_name = "埋め込み先のurl",
+        max_length = 60,
+        blank=True,
+        null=True,
+    )
 
     html = models.TextField(
         verbose_name = "embed_html",

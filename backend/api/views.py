@@ -51,6 +51,7 @@ SELECT api_tarent.id,
 	group_concat(DISTINCT api_tarentsite.url) AS tarent_site_url,
 	group_concat(DISTINCT api_sitetype.name) AS site_type_name,
     group_concat(DISTINCT api_tarentinfositeembed.html) AS tarent_info_site_embed_html,
+    group_concat(DISTINCT api_tarentinfositeembed.url) AS tarent_info_site_embed_url,
 	group_concat(DISTINCT api_sitetype2.name) AS tarent_info_site_type_name
 
     FROM api_Tarent
@@ -126,6 +127,7 @@ SELECT api_tarent.id,
         queryset['tarent_site_url'] = queryset['tarent_site_url'].split(",")
         queryset['site_type_name'] = queryset['site_type_name'].split(",")
         queryset['tarent_info_site_embed_html'] = queryset['tarent_info_site_embed_html'].split(",")
+        queryset['tarent_info_site_embed_url'] = queryset['tarent_info_site_embed_url'].split(",")
         queryset['tarent_info_site_type_name'] = queryset['tarent_info_site_type_name'].split(",")
 
         return Response(queryset)
