@@ -47,7 +47,9 @@ SELECT api_tarent.id,
 	api_tarentbrasize.id AS tarent_brasize_id,
     api_tarentbrasize.name AS tarent_brasize_name,
     group_concat(DISTINCT api_tarentart.id) AS tarent_art_id,
-	group_concat(DISTINCT api_tarentart.name) AS tarent_art_name
+	group_concat(DISTINCT api_tarentart.name) AS tarent_art_name,
+	group_concat(DISTINCT api_tarentsite.url) AS tarent_site_url,
+	group_concat(DISTINCT api_sitetype.name) AS site_type_name
 
     FROM api_Tarent
     INNER JOIN api_tarent_tarent_personality
@@ -78,6 +80,11 @@ SELECT api_tarent.id,
 		ON api_Tarent.tarent_bra_size_id = api_tarentbrasize.id
     INNER JOIN api_tarentart
 		ON api_tarent.id = api_tarentart.tarent_id
+    INNER JOIN api_tarentsite
+		ON api_tarent.id = api_tarentsite.tarent_id
+	INNER JOIN api_sitetype
+		ON api_tarentsite.site_type_id = api_sitetype.id
+
     WHERE api_Tarent.id = %s
     GROUP BY api_tarent.stage_name,
         api_tarent.family_name,
@@ -106,6 +113,8 @@ SELECT api_tarent.id,
         queryset['tarent_upperbody_name'] = queryset['tarent_upperbody_name'].split(",")
         queryset['tarent_art_id'] = queryset['tarent_art_id'].split(",")
         queryset['tarent_art_name'] = queryset['tarent_art_name'].split(",")
+        queryset['tarent_site_url'] = queryset['tarent_site_url'].split(",")
+        queryset['site_type_name'] = queryset['site_type_name'].split(",")
 
         return Response(queryset)
 
