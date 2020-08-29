@@ -262,42 +262,6 @@ class TarentArtSampleImage(models.Model):
     def __str__(self):
         return f'{self.name}'
 
-class TarentTimeline(models.Model):
-    isbn = models.CharField(
-        verbose_name = "ISBNコード",
-        max_length = 40,
-    )
-    title = models.CharField(
-        verbose_name = '署名',
-        max_length = 40,
-    )
-    price = models.IntegerField(
-        verbose_name = '価格',
-    )
-    publisher = models.CharField(
-        verbose_name = "出版社",
-        choices = [
-            ('集英社','集英社'),
-        ],
-        max_length = 40,
-    )
-    draft = models.BooleanField(
-        verbose_name = '下書き(チェックを外すと公開されます。)',
-        default=True,
-    )
-    published_at = models.DateTimeField(
-        verbose_name = "公開日時",
-        default=timezone.now,
-    )
-    tarent = models.ForeignKey(
-        Tarent,
-        verbose_name='タレント',
-        on_delete=models.PROTECT,
-    )
-
-    def __str__(self):
-        return f'{self.tarent}タイムライン'
-
 class SiteType(models.Model):
     name = models.CharField(
         verbose_name = "サイトタイプ",
@@ -305,6 +269,37 @@ class SiteType(models.Model):
     )
     def __str__(self):
         return f'{self.name}'
+
+class TarentTimeline(models.Model):
+
+    tarent = models.ForeignKey(
+        Tarent,
+        verbose_name='タレント',
+        on_delete=models.PROTECT,
+    )
+    url = models.URLField(
+        verbose_name = "timelineへのurl",
+        max_length = 40,
+        blank=True,
+        null=True,
+    )
+    html = models.TextField(
+        verbose_name = '埋め込みhtml',
+        max_length = 200,
+        blank=True,
+        null=True,
+        
+    )
+    site_type = models.ForeignKey(
+        SiteType,
+        verbose_name='サイトのタイプ',
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+    )
+    
+    def __str__(self):
+        return f'{self.tarent}タイムライン'
 
 class TarentInfoSiteEmbed(models.Model):
     tarent = models.ForeignKey(
