@@ -5,7 +5,7 @@ from django.urls import path, include
 urlpatterns = [
     path('tarent/<int:id>/', views.TarentViewSet.as_view()),
     path('tarent_personality/', views.TarentPersonalityViewSet.as_view()),
-    path('tarent_face/', views.TarentFaceViewSet.as_view()),
+    path('tarent_face/<int:id>/', views.TarentFaceViewSet.as_view()),
     path('tarent_body/', views.TarentBodyViewSet.as_view()),
     path('tarent_upper_body/', views.TarentUpperBodyViewSet.as_view()),
     path('tarent_lower_body/', views.TarentLowerBodyViewSet.as_view()),

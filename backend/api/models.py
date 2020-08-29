@@ -16,6 +16,12 @@ class TarentFace(models.Model):
         verbose_name = "顔の傾向",
         max_length = 40,
     )
+    memo = models.TextField(
+        verbose_name = "顔についてメモ",
+        max_length = 200,
+        blank=True,
+        null=True,
+    )
     def __str__(self):
         return f'{self.name}'
 

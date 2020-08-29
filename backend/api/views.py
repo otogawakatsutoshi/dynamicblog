@@ -169,9 +169,36 @@ class TarentPersonalityViewSet(APIView):
     filter_fields = ('name',)
 
 class TarentFaceViewSet(APIView):
-    queryset = models.TarentFace.objects.all()
-    serializer_class = serializer.TarentFaceSerializer
-    filter_fields = ('name',)
+    def get(self, request, id,format=None):
+       
+        cursor = connection.cursor()
+        cursor.execute(
+"""
+SELECT api_tarentface.id,
+		api_tarentface.name AS tarent_face_name,
+        replace(replace(api_tarentface.memo,'\r\n','<br />'),'\n','<br />') AS tarent_face_memo,
+		group_concat(api_tarent.id) AS tarent_id,
+		group_concat(api_tarent.stage_name) AS tarent_stage_name
+FROM api_tarentface
+INNER JOIN api_tarent_tarent_face
+	ON api_tarentface.id = api_tarent_tarent_face.tarentface_id
+INNER JOIN api_tarent
+	ON api_tarent_tarent_face.tarent_id = api_tarent.id
+WHERE api_tarentface.id = %s
+GROUP BY api_tarentface.id,
+		api_tarentface.name
+""",
+        [id])
+        # 一行であることは確定なので[0]でjsonに戻す。もしくはnullのときはエラー
+        queryset = dictfetchall(cursor)[0]
+
+        if queryset['tarent_id'] is not None:
+            queryset['tarent_id'] = queryset['tarent_id'].split(",")
+        if queryset['tarent_stage_name'] is not None:
+            queryset['tarent_stage_name'] = queryset['tarent_stage_name'].split(",")
+        
+        return Response(queryset)
+
 
 class TarentBodyViewSet(APIView):
     queryset = models.TarentBody.objects.all()
@@ -196,7 +223,7 @@ class TarentBraSizeViewSet(APIView):
 """
 SELECT api_tarentbrasize.id,
 		api_tarentbrasize.name AS tarent_bra_size,
-        api_tarentbrasize.memo AS tarent_bra_size_memo,
+        replace(replace(api_tarentbrasize.memo,'\r\n','<br />'),'\n','<br />') AS tarent_bra_size_memo,
 		group_concat(api_tarent.id) AS tarent_id,
 		group_concat(api_tarent.stage_name) AS tarent_stage_name
 FROM api_tarentbrasize
