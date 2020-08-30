@@ -99,6 +99,12 @@ class Tarent(models.Model):
         verbose_name = "名(ローマ字)",
         max_length = 40,
     )
+    review = models.TextField(
+        verbose_name = "レビュー",
+        max_length = 800,
+        blank=True,
+        null=True,
+    )
     birth_date = models.DateField(
         verbose_name = "誕生日(分からなければ空欄)",
         blank=True,

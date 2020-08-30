@@ -281,28 +281,61 @@ class TarentTimelineViewSet(APIView):
         cursor = connection.cursor()
         cursor.execute(
 """
-SELECT api_tarentface.id,
-		api_tarentface.name AS tarent_face_name,
-        replace(replace(api_tarentface.memo,'\r\n','<br />'),'\n','<br />') AS tarent_face_memo,
-		group_concat(api_tarent.id) AS tarent_id,
-		group_concat(api_tarent.stage_name) AS tarent_stage_name
-FROM api_tarentface
-INNER JOIN api_tarent_tarent_face
-	ON api_tarentface.id = api_tarent_tarent_face.tarentface_id
+SELECT api_tarent.id AS tarent_id,
+		api_tarent.stage_name AS tarent_stage_name,
+		group_concat(DISTINCT CASE api_sitetype.name
+			WHEN 'twitter' then api_tarenttimeline.html
+			ELSE NULL
+			END) AS  twitter_embed_html,
+		group_concat(DISTINCT CASE api_sitetype.name
+			WHEN 'twitter' then api_tarenttimeline.url
+			ELSE NULL
+			END) AS  twitter_embed_url,
+		group_concat(DISTINCT CASE api_sitetype.name
+			WHEN 'instagram' then api_tarenttimeline.html
+			ELSE NULL
+			END) AS  instagram_embed_html,
+		group_concat(DISTINCT CASE api_sitetype.name
+			WHEN 'instagram' then api_tarenttimeline.url
+			ELSE NULL
+			END) AS  instagram_embed_url,
+		group_concat(DISTINCT CASE api_sitetype.name
+			WHEN 'youtube' then api_tarenttimeline.html
+			ELSE NULL
+			END) AS  youtube_embed_html,
+		group_concat(DISTINCT CASE api_sitetype.name
+			WHEN 'youtube' then api_tarenttimeline.url
+			ELSE NULL
+			END) AS  youtube_embed_url
+FROM api_tarenttimeline
 INNER JOIN api_tarent
-	ON api_tarent_tarent_face.tarent_id = api_tarent.id
-WHERE api_tarentface.id = %s
-GROUP BY api_tarentface.id,
-		api_tarentface.name
+	ON api_tarenttimeline.tarent_id = api_tarent.id
+INNER JOIN api_sitetype
+	ON api_tarenttimeline.site_type_id = api_sitetype.id
+WHERE api_tarent.id = %s
+GROUP BY  api_tarent.id,
+		api_tarent.stage_name
+
+
 """,
         [tarent_id])
         # 一行であることは確定なので[0]でjsonに戻す。もしくはnullのときはエラー
         queryset = dictfetchall(cursor)[0]
 
-        if queryset['tarent_id'] is not None:
-            queryset['tarent_id'] = queryset['tarent_id'].split(",")
-        if queryset['tarent_stage_name'] is not None:
-            queryset['tarent_stage_name'] = queryset['tarent_stage_name'].split(",")
+        if queryset['twitter_embed_html'] is not None:
+            queryset['twitter_embed_html'] = queryset['twitter_embed_html'].split(",")
+        if queryset['twitter_embed_url'] is not None:
+            queryset['twitter_embed_url'] = queryset['twitter_embed_url'].split(",")
+        if queryset['instagram_embed_html'] is not None:
+            queryset['instagram_embed_html'] = queryset['instagram_embed_html'].split(",")
+        if queryset['instagram_embed_url'] is not None:
+            queryset['instagram_embed_url'] = queryset['instagram_embed_url'].split(",")
+        if queryset['youtube_embed_html'] is not None:
+            queryset['youtube_embed_html'] = queryset['youtube_embed_html'].split(",")
+        if queryset['youtube_embed_url'] is not None:
+            queryset['youtube_embed_url'] = queryset['youtube_embed_url'].split(",")
+
+        return Response(queryset)
 
 class TarentSiteViewSet(APIView):
     queryset = models.TarentSite.objects.all()

@@ -17,6 +17,7 @@ urlpatterns = [
     path('tarent_art/', views.TarentArtViewSet.as_view()),
     path('tarent_art_fetishism/', views.TarentArtFetishismViewSet.as_view()),
     path('tarent_timeline/', views.TarentTimelineViewSet.as_view()),
+    path('tarent_timeline/<tarent_id>/', views.TarentTimelineViewSet.as_view()),
     path('tarent_site/', views.TarentSiteViewSet.as_view()),
     path('site_type/', views.SiteTypeViewSet.as_view()),
 ]
