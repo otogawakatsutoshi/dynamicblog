@@ -99,6 +99,12 @@ class Tarent(models.Model):
         verbose_name = "名(ローマ字)",
         max_length = 40,
     )
+    image = models.URLField(
+        verbose_name = "画像へのurl",
+        max_length = 80,
+        blank=True,
+        null=True,
+    )
     review = models.TextField(
         verbose_name = "レビュー",
         max_length = 800,
