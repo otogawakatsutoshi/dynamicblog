@@ -68,10 +68,15 @@ class Tarent(models.Model):
     stage_name = models.CharField(
         verbose_name = "芸名。無いなら、芸能ニュースなどでの呼称",
         max_length = 40,
+        blank=False,
+        null=False,
+        unique=True,
     )
     family_name = models.CharField(
         verbose_name = "性(漢字)漢字が無い外国人ならカタカナ",
         max_length = 40,
+        blank=True,
+        null=True,
     )
     first_name = models.CharField(
         verbose_name = "名(漢字)漢字が無い外国人ならカタカナ",
@@ -94,16 +99,21 @@ class Tarent(models.Model):
     family_rome_name = models.CharField(
         verbose_name = "性(ローマ字)",
         max_length = 40,
+        blank=True,
+        null=True,
     )
     first_rome_name = models.CharField(
         verbose_name = "名(ローマ字)",
         max_length = 40,
+        blank=True,
+        null=True,
     )
     image = models.URLField(
         verbose_name = "画像へのurl",
         max_length = 80,
         blank=True,
         null=True,
+        unique=True,
     )
     review = models.TextField(
         verbose_name = "レビュー",
@@ -125,22 +135,32 @@ class Tarent(models.Model):
     tarent_personality = models.ManyToManyField(
         TarentPersonality,
         verbose_name = "性格(こっちから見えるでよい。)",
+        blank=True,
+        null=True,
     )
     tarent_face = models.ManyToManyField(
         TarentFace,
         verbose_name = "顔の傾向",
+        blank=True,
+        null=True,
     )
     tarent_body = models.ManyToManyField(
         TarentBody,
         verbose_name = "ボディ",
+        blank=True,
+        null=True,
     )
     tarent_upper_body = models.ManyToManyField(
         TarentUpperBody,
         verbose_name = "上半身",
+        blank=True,
+        null=True,
     )
     tarent_lower_body = models.ManyToManyField(
         TarentLowerBody,
         verbose_name = "下半身",
+        blank=True,
+        null=True,
     )
     tarent_bra_size = models.ForeignKey(
         TarentBraSize,
@@ -151,6 +171,50 @@ class Tarent(models.Model):
     )
     def __str__(self):
         return f'{self.stage_name}'
+
+class JavPop(models.Model):
+    name = models.TextField(
+        verbose_name = "タイトル",
+        max_length = 80,
+        unique=True,
+    )
+    tarent = models.ForeignKey(
+        Tarent,
+        verbose_name='タレント名',
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+    )
+
+    image = models.TextField(
+        verbose_name = "パッケージ画像へのurl",
+        max_length = 80,
+        unique=True,
+        blank=True,
+        null=True,
+    )
+
+    art_num = models.CharField(
+        verbose_name = "ビデオ番号",
+        max_length = 20,
+        blank=True,
+        null=True,
+    )
+    def __str__(self):
+        return f'{self.name}'
+
+class JavPopLink(models.Model):
+    javpop = models.ForeignKey(
+        JavPop,
+        verbose_name = "",
+        on_delete=models.PROTECT,
+    )
+    download_link = models.CharField(
+        verbose_name = "ビデオ番号",
+        max_length = 60,
+    )
+    def __str__(self):
+        return f'{self.javpop}'
 
 class TarentArtFetishism(models.Model):
     name = models.CharField(

@@ -3,6 +3,18 @@ from django import forms
 from . import models
 from guardian.admin import GuardedModelAdmin
 
+@admin.register(models.JavPop)
+class JavPop(GuardedModelAdmin):
+    search_fields = ['name']
+
+@admin.register(models.JavPopLink)
+class JavPopLink(GuardedModelAdmin):
+    search_fields = ['javpop__name']
+    def javpop_name(self, obj):
+        return obj.javpop.name
+    javpop_name.short_description = 'javpop_name'
+    javpop_name.admin_order_field = 'javpop__name'
+
 @admin.register(models.Tarent)
 class Tarent(GuardedModelAdmin):
     search_fields = ['stage_name']
