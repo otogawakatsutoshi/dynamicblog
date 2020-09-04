@@ -200,18 +200,46 @@ class JavPop(models.Model):
         blank=True,
         null=True,
     )
+
+    video = models.BinaryField(
+        editable = True,
+        verbose_name = "動画",
+        blank=True,
+        null=True,
+    )
+
     def __str__(self):
         return f'{self.name}'
 
 class JavPopLink(models.Model):
     javpop = models.ForeignKey(
         JavPop,
-        verbose_name = "",
+        verbose_name = "作品名",
         on_delete=models.PROTECT,
+        blank=True,
+        null=True,
     )
     download_link = models.CharField(
-        verbose_name = "ビデオ番号",
+        verbose_name = "ダウンロードへのリンク",
         max_length = 60,
+    )
+    def __str__(self):
+        return f'{self.javpop}'
+
+class JavPopVideoImage(models.Model):
+    javpop = models.ForeignKey(
+        JavPop,
+        verbose_name = "作品名",
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+        unique=True,
+    )
+    image = models.BinaryField(
+        editable = True,
+        verbose_name = "画像",
+        blank=True,
+        null=True,
     )
     def __str__(self):
         return f'{self.javpop}'

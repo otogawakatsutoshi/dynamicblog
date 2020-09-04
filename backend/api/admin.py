@@ -1,15 +1,54 @@
 from django.contrib import admin
 from django import forms
 from . import models
+from django.db import models as django_db_models
 from guardian.admin import GuardedModelAdmin
+
+class BinaryFileInput(forms.ClearableFileInput):
+
+    def is_initial(self, value):
+        """
+        Return whether value is considered to be initial value.
+        """
+        return bool(value)
+
+    def format_value(self, value):
+        """Format the size of the value in the db.
+
+        We can't render it's name or url, but we'd like to give some information
+        as to wether this file is not empty/corrupt.
+        """
+        if self.is_initial(value):
+            return f'{len(value)} bytes'
+
+
+    def value_from_datadict(self, data, files, name):
+        """Return the file contents so they can be put in the db."""
+        upload = super().value_from_datadict(data, files, name)
+        if upload:
+            return upload.read()
 
 @admin.register(models.JavPop)
 class JavPop(GuardedModelAdmin):
     search_fields = ['name']
+    formfield_overrides = {
+        django_db_models.BinaryField: {'widget': BinaryFileInput()},
+    }
 
 @admin.register(models.JavPopLink)
 class JavPopLink(GuardedModelAdmin):
     search_fields = ['javpop__name']
+    def javpop_name(self, obj):
+        return obj.javpop.name
+    javpop_name.short_description = 'javpop_name'
+    javpop_name.admin_order_field = 'javpop__name'
+
+@admin.register(models.JavPopVideoImage)
+class JavPopVideoImage(GuardedModelAdmin):
+    search_fields = ['javpop__name']
+    formfield_overrides = {
+        django_db_models.BinaryField: {'widget': BinaryFileInput()},
+    }
     def javpop_name(self, obj):
         return obj.javpop.name
     javpop_name.short_description = 'javpop_name'
